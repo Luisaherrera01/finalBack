@@ -1,8 +1,9 @@
 package com.Final.Final.Entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
-import org.springframework.boot.autoconfigure.web.WebProperties;
+
 
 @Entity
 @Table(name="mercancias")
@@ -16,25 +17,28 @@ public class Mercancia {
     private String nombre;
     @Column(name="descripcion")
     private  String descripcion;
-    @Column(name="fecha")
-    private String fecha;
+    @Column(name="fechaDeEntrada")
+    private String fechaDeEntrada;
     @Column(name="motivoDevolucion")
     private  String motivoDevolucion;
     @Column(name="volumen")
-    private String volumen;
+    private Double volumen;
+
+    @Transient
+    private String mensajeError;
     @ManyToOne
     @JoinColumn (name="id_zona")
-    @JsonManagedReference
+    @JsonBackReference
     private Zona zona;
 
     public Mercancia() {
     }
 
-    public Mercancia(Integer id, String nombre, String descripcion, String fecha, String motivoDevolucion, String volumen, Zona zona) {
+    public Mercancia(Integer id, String nombre, String descripcion, String fechaDeEntrada, String motivoDevolucion, Double volumen, Zona zona) {
         this.id = id;
         this.nombre = nombre;
         this.descripcion = descripcion;
-        this.fecha = fecha;
+        this.fechaDeEntrada = fechaDeEntrada;
         this.motivoDevolucion = motivoDevolucion;
         this.volumen = volumen;
         this.zona = zona;
@@ -64,12 +68,12 @@ public class Mercancia {
         this.descripcion = descripcion;
     }
 
-    public String getFecha() {
-        return fecha;
+    public String getFechaDeEntrada() {
+        return fechaDeEntrada;
     }
 
-    public void setFecha(String fecha) {
-        this.fecha = fecha;
+    public void setFechaDeEntrada(String fechaDeEntrada) {
+        this.fechaDeEntrada = fechaDeEntrada;
     }
 
     public String getMotivoDevolucion() {
@@ -80,11 +84,27 @@ public class Mercancia {
         this.motivoDevolucion = motivoDevolucion;
     }
 
-    public String getVolumen() {
+    public Double getVolumen() {
         return volumen;
     }
 
-    public void setVolumen(String volumen) {
+    public void setVolumen(Double volumen) {
         this.volumen = volumen;
+    }
+
+    public String getMensajeError() {
+        return mensajeError;
+    }
+
+    public void setMensajeError(String mensajeError) {
+        this.mensajeError = mensajeError;
+    }
+
+    public Zona getZona() {
+        return zona;
+    }
+
+    public void setZona(Zona zona) {
+        this.zona = zona;
     }
 }

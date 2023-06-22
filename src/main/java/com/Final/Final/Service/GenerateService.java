@@ -1,5 +1,5 @@
 package com.Final.Final.Service;
-
+//Debo crear un servicio base DTO para las DTO o refactorizar este
 import java.util.List;
 
 public interface GenerateService<E> {

@@ -1,6 +1,7 @@
 package com.Final.Final.Entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
 import java.util.List;
@@ -13,12 +14,12 @@ public class Zona {
     @Column(name="id")
     private Integer id;
     @Column(name="nombre")
-    private String nombre;
+    private String nombre = "Bodega";
 
     @Column(name="volumenZona")
-    private String volumenZona;
+    private Double volumenZona;
     @OneToMany(mappedBy = "zona")
-    @JsonBackReference
+    @JsonManagedReference
     private List<Mercancia>mercancias;
     @Transient
     private String mensajeError;
@@ -26,13 +27,11 @@ public class Zona {
     public Zona() {
     }
 
-    public Zona(Integer id, String nombre,  String volumenZona, List<Mercancia> mercancias, String mensajeError) {
+    public Zona(Integer id, String nombre,  Double volumenZona, List<Mercancia> mercancias) {
         this.id = id;
         this.nombre = nombre;
-
         this.volumenZona = volumenZona;
         this.mercancias = mercancias;
-        this.mensajeError = mensajeError;
     }
 
     public Integer getId() {
@@ -53,11 +52,11 @@ public class Zona {
 
 
 
-    public String getVolumenZona() {
+    public Double getVolumenZona() {
         return volumenZona;
     }
 
-    public void setVolumenZona(String volumenZona) {
+    public void setVolumenZona(Double volumenZona) {
         this.volumenZona = volumenZona;
     }
 

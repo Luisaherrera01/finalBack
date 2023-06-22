@@ -1,8 +1,8 @@
 package com.Final.Final.Service;
 
 import com.Final.Final.Entity.Mercancia;
-import com.Final.Final.Entity.Zona;
 import com.Final.Final.Repository.MercanciaRepository;
+import com.Final.Final.Repository.ZonaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -13,6 +13,8 @@ import java.util.Optional;
 public class MercanciaService implements GenerateService<Mercancia>{
     @Autowired
     protected MercanciaRepository mercanciaRepository;
+    @Autowired
+    protected ZonaRepository zonaRepository;
 
 
     @Override
@@ -43,12 +45,26 @@ public class MercanciaService implements GenerateService<Mercancia>{
     @Override
     public Mercancia register(Mercancia record) throws Exception {
         try {
-            Mercancia mercanciaGuardada= (Mercancia) mercanciaRepository.save(record);
-            return mercanciaGuardada;
+
+            Double volumenDeMercancia = record.getVolumen();
+            int idDeZona = record.getZona().getId();
+            Double volumenDeZona = zonaRepository.findById(idDeZona).get().getVolumenZona();
+
+
+            if(volumenDeMercancia < volumenDeZona){
+               Mercancia mercanciaRegistrada =  mercanciaRepository.save(record);
+                return mercanciaRegistrada  ;
+            }else{
+                throw new Exception("No hay espacio en la zona");
+            }
         }catch (Exception error){
             throw new Exception(error.getMessage());
         }
     }
+    public Double restarVolumenZona (Double volumenZona, Double volumenMercancia) {
+        return (volumenZona - volumenMercancia);
+    }
+
 
     @Override
     public Mercancia update(Integer id, Mercancia datanew) throws Exception {
@@ -58,7 +74,7 @@ public class MercanciaService implements GenerateService<Mercancia>{
                 Mercancia mercanciaExistente = mercanciaOptional.get();
                 mercanciaExistente.setNombre(datanew.getNombre());
                 mercanciaExistente.setDescripcion(datanew.getDescripcion());
-                mercanciaExistente.setFecha(datanew.getFecha());
+                mercanciaExistente.setFechaDeEntrada(datanew.getFechaDeEntrada());
                 mercanciaExistente.setMotivoDevolucion(datanew.getMotivoDevolucion());
                 mercanciaExistente.setVolumen(datanew.getVolumen());
                 Mercancia mercanciaActualizada = (Mercancia)mercanciaRepository.save(mercanciaExistente);
